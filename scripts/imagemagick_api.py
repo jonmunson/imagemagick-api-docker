@@ -1,8 +1,12 @@
+import logging
 from flask import Flask, request, jsonify
 import subprocess
 import os
 
 app = Flask(__name__)
+
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/process-image', methods=['POST'])
 def process_image():
@@ -17,14 +21,15 @@ def process_image():
     command = f"magick {input_path} -gravity North -pointsize 30 -fill green -font '{font}' -annotate +0+10 '{text}' {output_path}"
     
     # Debug print command
-    print(f"Executing command: {command}")
+    app.logger.debug(f"Executing command: {command}")
 
     try:
         # Execute the command
         subprocess.run(command, shell=True, check=True)
         return jsonify({'success': True, 'message': 'Image processed successfully.'}), 200
     except subprocess.CalledProcessError as e:
+        app.logger.error(f"Error processing image: {e}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
