@@ -12,7 +12,13 @@ services:
     environment:
       - FLASK_ENV=development
     command: >
-      sh -c "pip install flask && apt-get update && apt-get install -y imagemagick && python /scripts/imagemagick_api.py"
+      sh -c "apt-get update && \
+              apt-get install -y software-properties-common && \
+              add-apt-repository ppa:avsm/image-magick && \
+              apt-get update && \
+              apt-get install -y imagemagick && \
+              pip install flask && \
+              python /scripts/imagemagick_api.py"
     networks:
       - imagemagick-network
 
