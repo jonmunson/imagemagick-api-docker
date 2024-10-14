@@ -1,10 +1,11 @@
 # Use a base image that includes Python
 FROM python:3.9.17-slim
 
-# Install ImageMagick
-RUN apt-get update && apt-get install -y \
-    imagemagick \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# Install necessary packages and add the repository for ImageMagick
+RUN apt-get update && \
+    apt-get install -y software-properties-common && \
+    apt-get install -y imagemagick && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /app
