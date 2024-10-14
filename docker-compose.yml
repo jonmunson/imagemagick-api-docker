@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  imagemagick-api:
+    image: python:3.9-slim
+    container_name: imagemagick-api
+    ports:
+      - "5000:5000"  # Expose API endpoint on port 5000
+    volumes:
+      - ./images:/images  # Shared volume to hold input/output images
+      - ./scripts:/scripts  # API and script files for handling requests
+    environment:
+      - FLASK_ENV=development
+    command: >
+      sh -c "pip install flask && python /scripts/imagemagick_api.py"
+    networks:
+      - imagemagick-network
+
+  imagemagick:
+    image: dpokidov/imagemagick
+    container_name: imagemagick
+    volumes:
+      - ./images:/images  # Shared volume with input/output images
+    networks:
+      - imagemagick-network
+
+networks:
+  imagemagick-network:
+    driver: bridge
