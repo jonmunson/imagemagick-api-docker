@@ -11,10 +11,13 @@ def process_image():
     input_path = data['input_image']
     output_path = data['output_image']
     text = data['text']
-    font = data.get('font', 'Liberation Sans')  # Default to Liberation Sans if no font is specified
+    font = data.get('font', 'Liberation-Sans')  # Default to Liberation Sans if no font is specified
 
     # Construct the command to annotate the image
     command = f"magick {input_path} -gravity North -pointsize 30 -fill green -font '{font}' -annotate +0+10 '{text}' {output_path}"
+    
+    # Debug print command
+    print(f"Executing command: {command}")
 
     try:
         # Execute the command
