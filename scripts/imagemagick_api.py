@@ -24,8 +24,8 @@ def process_image():
         if not os.path.isfile(input_path):
             return jsonify({'error': f'Input image {input_image} not found'}), 404
 
-        # Run ImageMagick command to annotate the image
-        command = f"/usr/local/bin/convert {input_path} -gravity North -pointsize 30 -fill green -annotate +0+10 '{text}' {output_path}"
+        # Run ImageMagick command to annotate the image using 'magick'
+        command = f"magick {input_path} -gravity North -pointsize 30 -fill green -annotate +0+10 '{text}' {output_path}"
         print(f"Running command: {command}")  # For debugging
         subprocess.run(command, shell=True, check=True)
 
