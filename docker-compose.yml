@@ -2,23 +2,12 @@ version: '3.7'
 
 services:
   imagemagick-api:
-    image: python:3.9.17-slim  # Specify the exact version of Python image
+    build: .  # Build from the Dockerfile in the current directory
     container_name: imagemagick-api
     ports:
       - "5000:5000"  # Expose API endpoint on port 5000
     volumes:
       - ./images:/images  # Shared volume to hold input/output images
-      - ./scripts:/scripts  # API and script files for handling requests
-    environment:
-      - FLASK_ENV=development
-    command: >
-      sh -c "apt-get update && \
-              apt-get install -y software-properties-common && \
-              add-apt-repository ppa:avsm/image-magick && \
-              apt-get update && \
-              apt-get install -y imagemagick && \
-              pip install flask && \
-              python /scripts/imagemagick_api.py"
     networks:
       - imagemagick-network
 
