@@ -11,16 +11,17 @@ def process_image():
     text = data.get('text', 'Test Text')
     font_size = data.get('font_size', 80)  # Default font size
     
-    # Check if supplied_image is provided
-    supplied_image = data.get('supplied_image')
+    # Accept both supplied_image (preferred) and input_image (legacy)
+    supplied_image = data.get('supplied_image') or data.get('input_image')
     if not supplied_image:
         return jsonify({'error': 'No supplied image provided.'}), 400  # Bad Request
     
     # Paths for intermediate images
     background_path = '/images/background.png'
     text_image_path = '/images/text_image.png'
-    resized_supplied_image_path = '/images/resized_supplied_image.png'  # Updated variable name
-    final_output_path = '/images/final_output.jpg'
+    resized_supplied_image_path = '/images/resized_supplied_image.png'
+    final_output_name = f"final_output_{os.getpid()}.jpg"
+    final_output_path = os.path.join('/images', final_output_name)
     
     # Step 1: Create the black background
     subprocess.run(['magick', '-size', '1920x1920', 'xc:black', background_path])
